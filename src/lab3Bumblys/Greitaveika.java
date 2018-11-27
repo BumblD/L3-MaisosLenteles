@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
@@ -15,11 +12,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.SynchronousQueue;
 import laborai.demo.Timekeeper;
 import laborai.gui.MyException;
-import laborai.studijosktu.HashType;
-import laborai.studijosktu.Ks;
 import laborai.studijosktu.MapKTU;
 import static laborai.studijosktu.MapKTU.DEFAULT_HASH_TYPE;
-import laborai.studijosktu.MapKTUx;
 
 public class Greitaveika {
     public static final String FINISH_COMMAND = "finishCommand";
@@ -50,14 +44,14 @@ public class Greitaveika {
         list.put("0", " -> 0");
         list.put("", " -> ");
         
-        for (int i = 0; i < list.table.length; i++) {
+        /*for (int i = 0; i < list.table.length; i++) {
             if (list.table[i] != null)
                 System.out.println(i + "=" +list.table[i].key + list.table[i].value);
             else
                 System.out.println(i + "=");
         }
         System.out.println("");
-        System.out.println(list.remove("d"));
+        System.out.println(list.remove("d"));*/
         
         /*HashSet<String> map3 = skaitytiDuomenisHash();
         Iterator it = map3.iterator();

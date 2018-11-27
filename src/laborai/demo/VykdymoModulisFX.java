@@ -3,6 +3,7 @@ package laborai.demo;
 import java.util.Locale;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lab3Bumblys.KnyguTestai;
 import laborai.gui.fx.Lab3WindowFX;
 
 /*
@@ -17,9 +18,10 @@ public class VykdymoModulisFX extends Application {
     @Override
     public void start(Stage primaryStage) {
         Locale.setDefault(Locale.US); // Suvienodiname skaičių formatus 
-        AutoTestai.atvaizdzioTestas();
-        //setUserAgentStylesheet(STYLESHEET_MODENA);    //Nauja FX išvaizda
-        setUserAgentStylesheet(STYLESHEET_CASPIAN); //Sena FX išvaizda
+        //AutoTestai.atvaizdzioTestas();
+        KnyguTestai.atvaizdzioTestas();
+        setUserAgentStylesheet(STYLESHEET_MODENA);    //Nauja FX išvaizda
+        //setUserAgentStylesheet(STYLESHEET_CASPIAN); //Sena FX išvaizda
         Lab3WindowFX.createAndShowFXGUI(primaryStage);
     }
 }

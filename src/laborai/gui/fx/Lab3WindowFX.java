@@ -4,10 +4,9 @@ import java.io.File;
 import java.util.List;
 import laborai.studijosktu.MapADTx;
 import laborai.studijosktu.HashType;
-import laborai.demo.Automobilis;
-import laborai.demo.AutoGamyba;
 import laborai.gui.MyException;
 import java.util.Locale;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -41,7 +40,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import lab3Bumblys.Greitaveika;
+import lab3Bumblys.Knyga;
+import lab3Bumblys.KnyguGamyba;
+import lab3Bumblys.MapKTUOA;
 import laborai.demo.GreitaveikosTyrimas;
+import laborai.studijosktu.MapADT;
 import laborai.studijosktu.MapKTUx;
 
 /**
@@ -91,11 +95,11 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
     private MenuFX menuFX;
     private final Stage stage;
 
-    private MapADTx<String, Automobilis> map;
+    private MapADTx<String, Knyga> map;
     private int sizeOfInitialSubSet, sizeOfGenSet, colWidth, initialCapacity;
     private float loadFactor;
     private HashType ht = HashType.DIVISION;
-    private final AutoGamyba autoGamyba = new AutoGamyba();
+    private final KnyguGamyba knyguGamyba = new KnyguGamyba();
 
     public Lab3WindowFX(Stage stage) {
         this.stage = stage;
@@ -322,7 +326,27 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
         } else if (source.equals(paneButtons.getButtons().get(2))) {
             mapEfficiency();
         } else if (source.equals(paneButtons.getButtons().get(3))) {
-            KsFX.ounerr(taEvents, MESSAGES.getString("notImplemented"));
+            mapRemove();
+        }
+    }
+    
+    public void mapRemove() {
+        if (map.isEmpty()) {
+            KsFX.ounerr(taEvents, MESSAGES.getString("msg6"));
+        } else {
+            String[][] arr = map.toArray();
+            String key = null;
+            Random rnd = new Random();
+            while (key == null) {
+                key = arr[rnd.nextInt(arr.length)][0];
+            }
+            map.remove(key.substring(0, key.indexOf("=")));
+            table.formTable(map.getMaxChainSize() * 2 + 1, colWidth);
+            String[][] modelList = map.getModelList(paneParam1.getTfOfTable().get(5).getText());
+            table.setItems(FXCollections.observableArrayList(modelList));
+            updateHashtableParameters(true);
+            KsFX.oun(taEvents, key, MESSAGES.getString("msg7"));
+            System.out.println(map.size());
         }
     }
 
@@ -335,11 +359,11 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
         createMap();
         // Jei failas nenurodytas - generuojami automobiliai ir talpinami atvaizdyje
         if (filePath == null) {
-            Automobilis[] autoArray = autoGamyba.gamintiIrParduotiAutomobilius(sizeOfGenSet, sizeOfInitialSubSet);
-            for (Automobilis a : autoArray) {
+            Knyga[] knyguArray = knyguGamyba.gamintiIrParduotiKnygas(sizeOfGenSet, sizeOfInitialSubSet);
+            for (Knyga k : knyguArray) {
                 map.put(
-                        autoGamyba.gautiIsBazesAutoId(), //raktas
-                        a);
+                        knyguGamyba.gautiIsBazesKnyguId(), //raktas
+                        k);
             }
             KsFX.ounArgs(taEvents, MESSAGES.getString("msg1"), map.size());
         } else { // Jei failas nurodytas skaitoma iš failo
@@ -363,22 +387,22 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
     }
 
     public void mapAdd() {
-        Automobilis a = autoGamyba.parduotiAutomobili();
+        Knyga k = knyguGamyba.parduotiKnyga();
         map.put(
-                autoGamyba.gautiIsBazesAutoId(), // Raktas
-                a);
+                knyguGamyba.gautiIsBazesKnyguId(), // Raktas
+                k);
         table.formTable(map.getMaxChainSize() * 2 + 1, colWidth);
         String[][] modelList = map.getModelList(paneParam1.getTfOfTable().get(5).getText());
         table.setItems(FXCollections.observableArrayList(modelList));
         updateHashtableParameters(true);
-        KsFX.oun(taEvents, a, MESSAGES.getString("msg2"));
+        KsFX.oun(taEvents, k, MESSAGES.getString("msg2"));
     }
 
     public void mapEfficiency() {
         KsFX.oun(taEvents, "", MESSAGES.getString("msg3"));
         paneRight.setDisable(true);
         menuFX.setDisable(true);
-        GreitaveikosTyrimas gt = new GreitaveikosTyrimas();
+        Greitaveika gt = new Greitaveika();
 
         // Ši gija paima rezultatus iš greitaveikos tyrimo gijos ir išveda 
         // juos i taEvents. Gija baigia darbą kai gaunama FINISH_COMMAND     
@@ -435,7 +459,10 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
     private void createMap() {
         switch (cmbCollisionTypes.getSelectionModel().getSelectedIndex()) {
             case 0:
-                map = new MapKTUx<>(new String(), new Automobilis(), initialCapacity, loadFactor, ht);
+                map = new MapKTUx<>(new String(), new Knyga(), initialCapacity, loadFactor, ht);
+                break;
+            case 2:
+                map = new MapKTUOA<>(initialCapacity);
                 break;
             // ...
             // Programuojant kitus kolizijų sprendimo metodus reikia papildyti switch sakinį

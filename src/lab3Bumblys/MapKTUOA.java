@@ -1,11 +1,11 @@
 package lab3Bumblys;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import laborai.studijosktu.MapADT;
+import laborai.studijosktu.MapADTx;
 import laborai.studijosktu.MapKTU;
 
-public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADT<K, V> {
+public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
     
     // Maišos lentelė
     protected Node<K, V>[] table;
@@ -14,12 +14,12 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADT<K, V> {
     // Einamas poros indeksas maišos lentelėje
     protected int index = 0;
     
+    // Naudojamas kvadratinis dėstymas
+    
     public MapKTUOA(int tSize) {
         size = 0;
         this.table = new Node[tSize];        
     }
-
-    //Collisions are solved by quadratic probing in this structure!!!
     
     @Override
     public boolean isEmpty() {
@@ -126,6 +126,36 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADT<K, V> {
     @Override
     public boolean contains(K key) {
         return get(key) != null;
+    }
+
+    @Override
+    public V put(String dataString) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void load(String filePath) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void save(String filePath) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void println() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void println(String title) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String[][] getModelList(String delimiter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     protected class Node<K, V> {
