@@ -10,8 +10,8 @@ public class KnyguTestai {
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.US); // suvienodiname skaičių formatus
-        //atvaizdzioTestas();
-        greitaveikosTestas();
+        atvaizdzioTestas();
+        //greitaveikosTestas();
     }
     
     public static void atvaizdzioTestas() { 
@@ -25,16 +25,16 @@ public class KnyguTestai {
         k5.parse("Programavimas;Vardenis Pavardenis;KTU;2010;99,99");
         
         // Raktų masyvas
-        String[] autoId = {"ID56", "ID12", "ID18", "ID11", "ID15", "ID16", "ID17"};
+        String[] knyguId = {"ID56", "ID12", "ID18", "ID11", "ID15", "ID16", "ID17"};
         int id = 0;
         
         MapKTUx<String, Knyga> atvaizdis = new MapKTUx(new String(), new Knyga(), HashType.DIVISION);
         // Reikšmių masyvas
         Knyga[] knygos = {k1, k2, k3, k4, k5, k6};
         for (Knyga k : knygos) {
-            atvaizdis.put(autoId[id++], k);
+            atvaizdis.put(knyguId[id++], k);
         }
-        
+        atvaizdis.println();
         /*atvaizdis.println("Porų išsidėstymas atvaizdyje pagal raktus");
         Ks.oun("Ar egzistuoja pora atvaizdyje?");
         Ks.oun(atvaizdis.contains(autoId[4]));
@@ -47,11 +47,25 @@ public class KnyguTestai {
         Ks.oun(atvaizdis.get(autoId[1]));
         Ks.oun(atvaizdis.get(autoId[5]));
         Ks.oun("Išspausdiname atvaizdžio poras String eilute:");*/
-        Ks.oun(atvaizdis);
-        System.out.println();
+        //Ks.oun(atvaizdis);
+        //System.out.println();
         //System.out.println(atvaizdis.containsValue(atvaizdis.get("TA105")));
         //System.out.println(atvaizdis.numberOfEmpties());
         //Ks.oun(atvaizdis.containsValue(null));
+        
+        MapKTUOA<String, Knyga> atv = new MapKTUOA(20);
+        int i=0;
+        for (Knyga k : knygos) {
+            atv.put(knyguId[i++], k);
+        }
+        //atv.println();
+        /*for (int j = 0; j < atv.table.length; j++) {
+            if (atv.table[i] != null) {
+                System.out.println(atv.table[i].value.toString());
+            } else {
+                System.out.println("null");
+            }
+        }*/
     }
         
         //Konsoliniame režime

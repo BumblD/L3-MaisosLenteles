@@ -1,6 +1,9 @@
 package lab3Bumblys;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import laborai.studijosktu.Ks;
 import laborai.studijosktu.MapADT;
 import laborai.studijosktu.MapADTx;
 import laborai.studijosktu.MapKTU;
@@ -40,14 +43,14 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
 
     @Override
     public String[][] toArray() {
-        String[][] string = new String[2][table.length];
+        String[][] string = new String[table.length][2];
         for (int i = 0; i < table.length; i++){
             if (table[i] == null){
-                string[0][i] = Integer.toString(i);
-                string[1][i] = " ";
+                string[i][0] = null;
+                string[i][1] = null;
             } else {
-                string[0][i] = Integer.toString(i) + " " + table[i].key.toString();
-                string[1][i] = table[i].value.toString();
+                string[i][0] = table[i].key.toString() + "=" + table[i].value;
+                string[i][1] = table[i].value.toString();
             }
         }
         return string;
@@ -58,7 +61,7 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         if (key == null || value == null) {
             throw new IllegalArgumentException("Key or value is null in put(Key key, Value value)");
         }
-        
+        maxChainSize = 1;
         index = hash(key, DEFAULT_HASH_TYPE);
         int i = 0;
         int index0 = index;
@@ -130,32 +133,71 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
 
     @Override
     public V put(String dataString) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not suppoted yet"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void load(String filePath) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not suppoted yet"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void save(String filePath) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not suppoted yet"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void println() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (size == 0) {
+            Ks.oun("Atvaizdis yra tuščias");
+        } else {
+            String[][] data = getModelList("=");
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length; j++) {
+                    String format = (j == 0 | j % 2 == 1) ? "%7s" : "%15s";
+                    Object value = data[i][j];
+                    Ks.ouf(format, (value == null ? "" : value));
+                }
+                Ks.oufln("");
+            }
+        }
     }
-
+    
     @Override
     public void println(String title) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Ks.ounn("========" + title + "=======");
+        println();
+        Ks.ounn("======== Atvaizdžio pabaiga =======");
     }
 
     @Override
     public String[][] getModelList(String delimiter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String[][] result = new String[table.length][2];
+        int count = 0;
+        for (Node<K, V> n : table) {
+            List<String> list = new ArrayList();
+            list.add( "[ " + count + " ]");
+            //list.add(split(n.toString(), delimiter));
+            if(n == null) {
+                list.add("");
+                list.add("");
+            } else {
+                list.add("-->");
+                list.add(n.toString());
+                list.add(split(n.toString(), delimiter));
+            }
+            result[count] = list.toArray(new String[0]);
+            count++;
+        }
+        return result;
+    }
+    
+    private String split(String s, String delimiter) {
+        int k = s.indexOf(delimiter);
+        if (k <= 0) {
+            return s;
+        }
+        return s.substring(0, k);
     }
     
     protected class Node<K, V> {
