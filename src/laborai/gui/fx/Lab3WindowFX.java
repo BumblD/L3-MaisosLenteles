@@ -357,7 +357,7 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
         readMapParameters();
         // Sukuriamas tuščias atvaizdis priklausomai nuo kolizijų tipo
         createMap();
-        // Jei failas nenurodytas - generuojami automobiliai ir talpinami atvaizdyje
+        // Jei failas nenurodytas - generuojamos knygos ir talpinamos atvaizdyje
         if (filePath == null) {
             Knyga[] knyguArray = knyguGamyba.gamintiIrParduotiKnygas(sizeOfGenSet, sizeOfInitialSubSet);
             for (Knyga k : knyguArray) {
@@ -462,7 +462,7 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
                 map = new MapKTUx<>(new String(), new Knyga(), initialCapacity, loadFactor, ht);
                 break;
             case 2:
-                map = new MapKTUOA<>(initialCapacity*3);
+                map = new MapKTUOA<>(100);
                 break;
             // ...
             // Programuojant kitus kolizijų sprendimo metodus reikia papildyti switch sakinį

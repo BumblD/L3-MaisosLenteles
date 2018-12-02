@@ -154,6 +154,11 @@ public final class Knyga implements KTUable{
         this.kaina = kaina;
     }    
     
+    /**
+     * Sukuria hash objektui
+     * 
+     * @return hash
+     */
     @Override
     public int hashCode() {
         return Objects.hash(pavadinimas, autorius, leidykla, leidimoMetai, kaina);

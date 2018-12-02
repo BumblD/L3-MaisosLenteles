@@ -281,6 +281,11 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         return null;
     }
 
+    /**
+     * Sudeda duomenis į masyvą
+     * 
+     * @return 
+     */
     @Override
     public String[][] toArray() {
         String[][] result = new String[table.length][];
@@ -298,6 +303,11 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         return result;
     }
 
+    /**
+     * Sudeda duomenis į String
+     * 
+     * @return 
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -311,10 +321,16 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         return result.toString();
     }
     
+    /**
+     * Patikrina ar ya tokia reikšmė hashtable
+     * 
+     * @param value - ieškoma reikšmė
+     * @return yra reikšmė ar ne
+     */
     public boolean containsValue(Object value) {
-        /*if (value == null) {
+        if (value == null) {
             throw new NullPointerException("Null pointer in containsValue(Object value)");
-        }*/
+        }
         for (int i = 0; i < table.length; i++) {
             if (table[i] != null) {
                 if (table[i].value == value) {
@@ -332,6 +348,11 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         return false;
     }
     
+    /**
+     * Suskaičiuoja tuščias vietas
+     * 
+     * @return tuščių vietų skaičius
+     */
     public int numberOfEmpties() {
         int num = 0;
         for (int i = 0; i < table.length; i++) {
@@ -342,6 +363,11 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         return num;
     }
     
+    /**
+     * Apskaičiuoja vidutinį grandinėlės ilgį
+     * 
+     * @return vidutinis grandinėlės ilgis
+     */
     public int averageChainSize() {
         if (table == null) {
             throw new NullPointerException("Null pointer in averageChainSize()");
@@ -349,6 +375,13 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         return size / (table.length - numberOfEmpties());
     }
     
+    /**
+     * Įdeda reikšmę, jei rakto vieta dar neužimta
+     * 
+     * @param key - raktas
+     * @param value - reikšmė
+     * @return null jei įdėjo, jei neįdėjo - grąžina reikšmę, kuri yra užėmusi tą vietą
+     */
     public V putIfAbsent (K key, V value) {
         if (key == null || value == null) {
             throw new IllegalArgumentException("Key or value is null in putIfAbsent(Key key, Value value)");
@@ -363,6 +396,14 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         }
     }
     
+    /**
+     * Pakeičia reikšmę
+     * 
+     * @param key - raktas
+     * @param oldValue - sena reikšmė
+     * @param newValue - nauja reikšmė
+     * @return pakeista ar ne
+     */
     public boolean replace(K key, V oldValue, V newValue){
         index = hash(key, ht);        
         if (table[index] == null) {
@@ -373,25 +414,39 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         if (node.value.equals(oldValue)) {
             node.value = newValue;
             return true;
+        } else {
+            while (node != null) {
+                if (node.value.equals(oldValue)) {
+                    node.value = newValue;
+                    return true;
+                }
+                node = node.next;
+            }
         }
         return false;
     }
     
-     public void replaceAll(V oldValue, V newValue){
+    /**
+     * Pakeičia visas reikšmes
+     * 
+     * @param oldValue - sena reikšmė
+     * @param newValue - nauja reikšmė
+     */
+    public void replaceAll(V oldValue, V newValue){
         //Replaces all the entries only if currently mapped to the specified value.
         if(oldValue != null && newValue != null) {
-            for (Node<K, V> thing : table) {
-                if (thing != null) {
-                    while (thing != null) {
-                        if (thing.value.equals(oldValue)) {
-                            thing.value = newValue;
+            for (Node<K, V> node : table) {
+                if (node != null) {
+                    while (node != null) {
+                        if (node.value.equals(oldValue)) {
+                            node.value = newValue;
                         }
-                        thing = thing.next;
+                        node = node.next;
                     }
                 }
             }
         }
-     }
+    }
 
     /**
      * Grąžina maksimalų grandinėlės ilgį.

@@ -8,7 +8,7 @@ import laborai.studijosktu.MapADT;
 import laborai.studijosktu.MapADTx;
 import laborai.studijosktu.MapKTU;
 
-public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
+public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADT<K, V>, MapADTx<K, V> {
     
     // Maišos lentelė
     protected Node<K, V>[] table;
@@ -19,6 +19,11 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
     
     // Naudojamas kvadratinis dėstymas
     
+    /**
+     * Konstruktorius
+     * 
+     * @param tSize - dydis
+     */
     public MapKTUOA(int tSize) {
         size = 0;
         this.table = new Node[tSize];        
@@ -34,6 +39,9 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         return size;
     }
 
+    /**
+     * Išvalo lentelę 
+     */
     @Override
     public void clear() {
         Arrays.fill(table, null);
@@ -41,6 +49,11 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         index = 0;
     }
 
+    /**
+     * Sudeda duomenis į masyvą
+     * 
+     * @return masyvas su duomenimis
+     */
     @Override
     public String[][] toArray() {
         String[][] string = new String[table.length][2];
@@ -56,19 +69,28 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         return string;
     }
 
+    /**
+     * Įdeda elementą į lentelę
+     * 
+     * @param key - raktas
+     * @param value - reikšmė
+     * @return įdėto elemento reikšmė
+     */
     @Override
     public V put(K key, V value) {
         if (key == null || value == null) {
             throw new IllegalArgumentException("Key or value is null in put(Key key, Value value)");
         }
-        maxChainSize = 1;
+        maxChainSize = 1; // Spausdinimui į GUI
+        
         index = hash(key, DEFAULT_HASH_TYPE);
         int i = 0;
         int index0 = index;
         
         if(table[index] == null) {
             table[index] = new Node<>(key, value);
-            size++;
+            size++;      
+            lastUpdatedChain = index; // Spausdinimui į GUI            
             return value;
         } else {
             i++;
@@ -77,6 +99,7 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
                 if (table[index] == null) {
                     table[index] = new Node<>(key, value);
                     size++;
+                    lastUpdatedChain = index; // Spausdinimui į GUI                    
                     return value;
                 }
                 i++;
@@ -86,8 +109,17 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         return value;
     }
 
+    /**
+     * Paima elementą iš lentelės
+     * 
+     * @param key - raktas
+     * @return ieškomo elemento reikšmė
+     */
     @Override
     public V get(K key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key is null in get(K key)");
+        }
         index = hash(key, DEFAULT_HASH_TYPE);
         int index0 = index;
         int i = 0;
@@ -102,6 +134,12 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         return null;
     }
 
+    /**
+     * Pašalina elementą iš lentelės
+     * 
+     * @param key - raktas
+     * @return pašalinto elemento reikšmė
+     */
     @Override
     public V remove(K key) {
         if (key == null) {
@@ -133,19 +171,22 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
 
     @Override
     public V put(String dataString) {
-        throw new UnsupportedOperationException("Not suppoted yet"); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void load(String filePath) {
-        throw new UnsupportedOperationException("Not suppoted yet"); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet"); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void save(String filePath) {
-        throw new UnsupportedOperationException("Not suppoted yet"); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet"); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Spausdina į konsolę
+     */
     @Override
     public void println() {
         if (size == 0) {
@@ -170,6 +211,12 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         Ks.ounn("======== Atvaizdžio pabaiga =======");
     }
 
+    /**
+     * Sudeda viską į masyvą
+     * 
+     * @param delimiter - teksto kirtiklis
+     * @return masyvas su duomenimis
+     */
     @Override
     public String[][] getModelList(String delimiter) {
         String[][] result = new String[table.length][2];
@@ -177,7 +224,6 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         for (Node<K, V> n : table) {
             List<String> list = new ArrayList();
             list.add( "[ " + count + " ]");
-            //list.add(split(n.toString(), delimiter));
             if(n == null) {
                 list.add("");
                 list.add("");
@@ -192,6 +238,13 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADTx<K, V> {
         return result;
     }
     
+    /**
+     * Atskiria string
+     * 
+     * @param s - paduodamas string
+     * @param delimiter - teksto kirtiklis
+     * @return atkirstą string
+     */
     private String split(String s, String delimiter) {
         int k = s.indexOf(delimiter);
         if (k <= 0) {

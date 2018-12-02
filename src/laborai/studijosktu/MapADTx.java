@@ -4,7 +4,7 @@ package laborai.studijosktu;
  * @param <K>
  * @param <V>
  */
-public interface MapADTx<K, V> extends MapADTp<K, V> {
+public interface MapADTx<K, V> extends MapADTp<K, V>{
 
     V put(String dataString);
 
