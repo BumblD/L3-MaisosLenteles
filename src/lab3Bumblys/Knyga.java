@@ -2,7 +2,6 @@ package lab3Bumblys;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -191,73 +190,7 @@ public final class Knyga implements KTUable{
 
         return true;
     }
-/*
-    // palyginimas pagal kainą
-    public int compareTo(Knyga e) {
-        double kitaKaina = e.kaina;
-        if (kaina < kitaKaina) return -1;
-        if (kaina > kitaKaina) return +1;
-        return 0;
-    }
     
-    // palyginimas pagal pavadinimą
-    public final static Comparator<Knyga> pagalPavadinima =
-              new Comparator<Knyga>() {
-       @Override
-       public int compare(Knyga k1, Knyga k2) {
-          return k1.getPavadinimas().compareTo(k2.getPavadinimas());
-       }
-    };
-    
-    // palyginimas pagal autorių
-    public final static Comparator<Knyga> pagalAutoriu =
-              new Comparator<Knyga>() {
-       @Override
-       public int compare(Knyga k1, Knyga k2) {
-          return k1.getAutorius().compareTo(k2.getAutorius());
-       }
-    };
-    
-    // palyginimas pagal pavadinimą ir autorių
-    public final static Comparator<Knyga> pagalPavadinimaAutoriu =
-              new Comparator<Knyga>() {
-       @Override
-       public int compare(Knyga k1, Knyga k2) {
-          int cmp = k1.getPavadinimas().compareTo(k2.getPavadinimas());
-          if(cmp != 0) return cmp;
-          return k1.getAutorius().compareTo(k2.getAutorius());
-       }
-    };
-    
-    // palyginimas pagal kainą
-    public final static Comparator pagalKainą = new Comparator() {
-       // sarankiškai priderinkite prie generic interfeiso ir Lambda funkcijų
-       @Override
-       public int compare(Object o1, Object o2) {
-          double k1 = ((Knyga) o1).getKaina();
-          double k2 = ((Knyga) o2).getKaina();
-          // didėjanti tvarka, pradedant nuo mažiausios
-          if(k1<k2) return -1;
-          if(k1>k2) return 1;
-          return 0;
-       }
-    };
-   
-    public static void main(String... args){
-        // suvienodiname skaičių formatus pagal LT lokalę (10-ainis kablelis)
-        Locale.setDefault(new Locale("LT")); 
-        Knyga k1 = new Knyga("Kaip pasiekti (beveik) viską", "Anders Ericsson", "BALTO leidybos namai", 2018, 9.99);
-        Knyga k2 = new Knyga("Vilko kelias", "Jordan Belfort", "BALTO leidybos namai", 2018, 12.99);
-        Knyga k3 = new Knyga("iSteve", "George Beahm", "Baltos lankos", 2012, 6.79);
-        Knyga k4 = new Knyga();//("Dievas visada keliauja incognito", "Laurent Gounelle", "Alma littera", 2012, 12.49);
-        //k3.parse("Motyvuoti paprasta;Lina Preikšienė;Tyto alba;2017;6,81");
-        //k4.parse("Boso valanda;Saulius Jovaišas;Baltos lankos;2015;10,03");
-        Ks.oun(k1);
-        Ks.oun(k2);
-        Ks.oun(k3);
-        Ks.oun(k4);
-    }
- */   
     /**
      * Knygos gamybos klasė
      */

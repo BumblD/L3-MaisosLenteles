@@ -10,8 +10,8 @@ public class KnyguTestai {
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.US); // suvienodiname skaičių formatus
-        atvaizdzioTestas();
-        //greitaveikosTestas();
+        //atvaizdzioTestas();
+        greitaveikosTestas();
     }
     
     public static void atvaizdzioTestas() { 

@@ -462,7 +462,7 @@ public class Lab3WindowFX extends BorderPane implements EventHandler<ActionEvent
                 map = new MapKTUx<>(new String(), new Knyga(), initialCapacity, loadFactor, ht);
                 break;
             case 2:
-                map = new MapKTUOA<>(100);
+                map = new MapKTUOA<>(initialCapacity);
                 break;
             // ...
             // Programuojant kitus kolizijų sprendimo metodus reikia papildyti switch sakinį

@@ -87,15 +87,22 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADT<K, V>, MapADT
         int i = 0;
         int index0 = index;
         
+        if (index >= table.length * this.loadFactor) {
+            rehash();
+        }
+        
         if(table[index] == null) {
             table[index] = new Node<>(key, value);
-            size++;      
+            size++;  
             lastUpdatedChain = index; // Spausdinimui į GUI            
             return value;
         } else {
             i++;
             index = (index0 + i*i) % table.length;
             while (index < table.length) {
+                if (index >= table.length * this.loadFactor) {
+                    rehash();
+                }
                 if (table[index] == null) {
                     table[index] = new Node<>(key, value);
                     size++;
@@ -238,8 +245,19 @@ public class MapKTUOA<K, V> extends MapKTU<K, V> implements MapADT<K, V>, MapADT
         return result;
     }
     
+    private void rehash() {
+        MapKTUOA map = new MapKTUOA(table.length * 2);
+        for (int i = 0; i < table.length; i++) {
+            if (table[i] != null) {
+                map.put(table[i].key, table[i].value);
+            }
+        }
+        table = map.table;
+        rehashesCounter++;
+    }
+    
     /**
-     * Atskiria string
+     * Atkerta string
      * 
      * @param s - paduodamas string
      * @param delimiter - teksto kirtiklis

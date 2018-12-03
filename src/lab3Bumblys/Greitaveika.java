@@ -5,14 +5,18 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.SynchronousQueue;
 import laborai.demo.Timekeeper;
 import laborai.gui.MyException;
 import laborai.studijosktu.MapKTU;
+import lab3Bumblys.Knyga;
+import lab3Bumblys.Knyga.Builder;
 import static laborai.studijosktu.MapKTU.DEFAULT_HASH_TYPE;
 
 public class Greitaveika {
@@ -24,7 +28,7 @@ public class Greitaveika {
     private final Timekeeper tk;
 
     private final String[] TYRIMU_VARDAI = {"put-KTUOA", "put-KTU", "remove-KTUOA", "remove-Hash"};
-    private final int[] TIRIAMI_KIEKIAI = {80368};
+    public int[] TIRIAMI_KIEKIAI = {10_000, 20_000, 40_000, 80_000};
 
     private static final File file = new File("data/zodynas.txt");
 
@@ -72,6 +76,18 @@ public class Greitaveika {
         }
         return strings;
     }
+    
+    private static HashMap<String, Knyga> kurtiDuomenisHash(int kiekis) {
+        HashMap<String, Knyga> map = new HashMap<>();
+        Random rnd = new Random();
+        Builder builder = new Builder();
+        for (int i = 0; i < kiekis; i++) {
+            String id = "ID" + rnd.nextInt(kiekis);
+            Knyga knyga = builder.buildRandom();
+            map.put(id, knyga);
+        }
+        return map;
+    }
 
     public void pradetiTyrima() {
         try {
@@ -83,8 +99,9 @@ public class Greitaveika {
         }
     }
 
-    public void SisteminisTyrimas() throws InterruptedException {
+    /*public void SisteminisTyrimas() throws InterruptedException {
         try {
+            int[] TIRIAMI_KIEKIAI = {80368};
             MapKTUOA<String, String> mapKTUOA = new MapKTUOA<>(160_000);
             MapKTU<String, String> mapKTU = new MapKTU<>(160_000, DEFAULT_HASH_TYPE);
             HashMap<String, String> mapHash = skaitytiDuomenisHash();
@@ -111,6 +128,46 @@ public class Greitaveika {
             }
             tk.finish(TYRIMU_VARDAI[3]);
             tk.seriesFinish();
+
+            StringBuilder sb = new StringBuilder();
+            tk.logResult(sb.toString());
+            tk.logResult(FINISH_COMMAND);
+        } catch (MyException e) {
+            tk.logResult(e.getMessage());
+        }
+    }*/
+    
+    public void SisteminisTyrimas() throws InterruptedException {
+        try {
+            int[] TIRIAMI_KIEKIAI = {10_000, 20_000, 40_000, 80_000};
+            for (int k : TIRIAMI_KIEKIAI) {
+                MapKTUOA<String, Knyga> mapKTUOA = new MapKTUOA<>(k*2);
+                MapKTU<String, Knyga> mapKTU = new MapKTU<>(k, DEFAULT_HASH_TYPE);
+                HashMap<String, Knyga> mapHash = kurtiDuomenisHash(k);
+                Object[] keys = mapHash.keySet().toArray();
+                tk.start();
+
+                for (int i = 0; i < mapHash.size(); i++) {
+                    mapKTUOA.put(keys[i].toString(), mapHash.get(keys[i].toString()));
+                }
+                tk.finish(TYRIMU_VARDAI[0]);
+
+                for (int i = 0; i < mapHash.size(); i++) {
+                    mapKTU.put(keys[i].toString(), mapHash.get(keys[i].toString()));
+                }
+                tk.finish(TYRIMU_VARDAI[1]);
+
+                for (int i = 0; i < mapHash.size(); i++) {
+                    mapKTUOA.remove(keys[i].toString());
+                }
+                tk.finish(TYRIMU_VARDAI[2]);
+
+                for (int i = 0; i < mapHash.size(); i++) {
+                    mapHash.remove(keys[i].toString());
+                }
+                tk.finish(TYRIMU_VARDAI[3]);
+                tk.seriesFinish();
+            }
 
             StringBuilder sb = new StringBuilder();
             tk.logResult(sb.toString());
